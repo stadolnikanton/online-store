@@ -9,4 +9,4 @@ class IndexView(View):
 
 class Product(View):
     def get(self, request):
-        pass
+        return render(request, "base.html")
