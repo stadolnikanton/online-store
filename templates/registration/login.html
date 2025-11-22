@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Store{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="card">
+                    <div class="card-header bg-dark text-white text-center py-3">
+                        <h3 class="fw-bolder mb-0">Welcome Back</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" action="{% url 'login' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Your name</label>
+                                <input type="text" class="form-control" id="login-email" name="username" placeholder="Enter your name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="login-password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="login-password" name="password" placeholder="Enter your password">
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-dark btn-lg">Login</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <p class="mb-0">Don't have an account? <a href="" class="text-dark">Register here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

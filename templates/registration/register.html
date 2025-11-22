@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Store{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card">
+                    <div class="card-header bg-dark text-white text-center py-3">
+                        <h3 class="fw-bolder mb-0">Create Account</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST">
+                            {{ form.as_p }}
+                            {% csrf_token %}
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-dark btn-lg">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <p class="mb-0">Already have an account? <a href="{% url 'login' %}" class="text-dark">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
