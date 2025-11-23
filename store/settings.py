@@ -1,8 +1,9 @@
 import os
-
+import logging
 
 from pathlib import Path
 from datetime import timedelta
+
 
 from dotenv import load_dotenv
 
@@ -12,7 +13,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.getenv("SECRET_KEY") 
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 DEBUG = True
@@ -91,7 +92,7 @@ LOGGING = {
     "disable_existing_loggers": False,
 
     "formatters": {
-        "simple":{
+        "simple": {
             "format": "[{levelname} {asctime} {message}]",
             "style": "{",
         }
@@ -109,7 +110,6 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-import logging
 logger = logging.getLogger('social')
 logger.setLevel(logging.DEBUG)
 
