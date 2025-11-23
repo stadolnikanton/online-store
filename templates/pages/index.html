@@ -5,7 +5,20 @@
                 <section class="py-5">
                     <div class="mb-3">
                         <strong>Категории:</strong>
-                            <a href="" class="btn btn-sm btn-outline-dark">Все</a>
+                        
+                        <a 
+                         href="{% url 'index_page' %}"
+                         class="btn {% if not selected_type %}btn-dark{% else %}btn-outline-dark{% endif %}">
+                         Все товары
+                        </a>
+
+                        {% for product_type in product_types %}
+                            <a 
+                                href="?product_types_id={{ product_type.id }}"
+                                class="btn {% if selected_type.id == product_type.id %}btn-dark{% else %}btn-outline-dark{% endif %}">
+                                {{ product_type }}
+                            </a>
+                        {% endfor %}
                     </div>
                 </section>
 
@@ -37,7 +50,11 @@
             
                                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                         <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a>
+                                            <form method="post" action="{% url 'cart' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                                <button type="submit" class="btn btn-outline-dark mt-auto">Add to cart</button>
+                                            </form>
                                         </div>
                                     </div>
 
