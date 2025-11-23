@@ -2,6 +2,7 @@ import os
 
 
 from pathlib import Path
+from datetime import timedelta
 
 from dotenv import load_dotenv
 
@@ -33,6 +34,10 @@ INSTALLED_APPS = [
     "users",
     "api",
     "social_django",
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -43,6 +48,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "store.middleware.request_timer.RequestTimerMiddleWare",
+
 ]
 
 
@@ -51,13 +58,53 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+CACHES = {
+     "default": {
+         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+         "LOCATION": "redis://127.0.0.1:6379"
+     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=100),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+}
+
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+os.makedirs(LOG_DIR, exist_ok=True)
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "formatters": {
+        "simple":{
+            "format": "[{levelname} {asctime} {message}]",
+            "style": "{",
+        }
+    },
+    "handlers": {},
+
+    "loggers": {},
+}
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "22296475577-ii3gs1sio0vk8o4t1vff1unjuu9iudge.apps.googleusercontent.com"
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
-#SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 
-#LOGIN_URL = '/auth/login/google-oauth2/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
