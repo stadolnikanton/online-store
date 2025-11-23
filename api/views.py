@@ -15,10 +15,9 @@ from shop.models import Product
 class ProductDetailAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
-    def get(self, request, pk):
+    def get(self, request, method, pk):
         try:
-            product = Product.objects.get(pk=pk) 
+             product = Product.objects.get(pk=pk) 
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response({
@@ -26,9 +25,20 @@ class ProductDetailAPIView(APIView):
             'name': product.name,
             'description': product.description,
             'price': product.price,
-            'type': product.types,
             'created_at': product.created_at,
             }, status=status.HTTP_200_OK)
+
+    def post(self, request, method, pk):
+        try:
+             product = Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+             return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+        product = Product.delete(product)
+
+        return Response({
+            "success delete": 200,
+            }, status=status.HTTP_200_OK)
+            
 
 
 class ProductListAPIView(APIView):

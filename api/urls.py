@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('register/', RegisterAPIView.as_view(), name='api_register'),
     path('logout/', LogoutAPIView.as_view(), name='api_logout'),
+    
 
     path('products/<int:pk>/', ProductDetailAPIView.as_view(), name='product-detail'),
     path('products/', ProductListAPIView.as_view(), name='product-list'),
