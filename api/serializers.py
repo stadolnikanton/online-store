@@ -21,19 +21,23 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class ProductSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=100)
-    description = serializers.CharField(allow_blank=True, required=False)
-    price = serializers.DecimalField(max_digits=10, decimal_places=2)
-    image = serializers.ImageField(required=False, allow_null=True)
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'description', 'price', 'created_at']
+        read_only_fields = ['id', 'created_at'] 
+
+class ProductCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'price']
 
     def validate_price(self, value):
         if value <= 0:
-            raise serializers.ValidationError("Цена должна быть больше нуля.")
+            raise serializers.ValidationError("Цена должна быть положительной")
         return value
 
-    def create(self, validated_data):
-        return Product.objects.create(**validated_data)
-
-
+class ProductUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'price']
