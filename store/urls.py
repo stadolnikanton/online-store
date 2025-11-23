@@ -12,13 +12,12 @@ from api.urls import urlpatterns as api_patternts
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-
     path("", include(pages_patterns)),
     path("shop/", include(shop_patterns)),
     path("user/", include(users_patterns)),
     path("cart/", include(cart_patterns)),
     path("api/", include(api_patternts)),
-    ]
+]
 
 
 if settings.DEBUG:

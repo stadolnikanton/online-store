@@ -17,18 +17,18 @@ class Register(View):
             user = form.save()
             login(request, user)
 
-            return redirect(to='/')
+            return redirect(to="/")
         else:
             print("Что-то не так!")
 
-        return render(request, 'registration/register.html', {'form': form})
+        return render(request, "registration/register.html", {"form": form})
 
 
 class Logout(View):
     def post(self, request):
         print(request)
         logout(request)
-        return redirect(to='/')
+        return redirect(to="/")
 
 
 class Account(View):

@@ -4,12 +4,13 @@ from django.contrib.auth.models import User
 
 class UserRegisterForm(forms.ModelForm):
     username = forms.CharField(
-        label="Your name:", 
+        label="Your name:",
         widget=forms.TextInput(
             attrs={
                 "class": "form-control",
                 "placeholder": "Enter your name",
-                })
+            }
+        ),
     )
 
     email = forms.CharField(
@@ -18,31 +19,30 @@ class UserRegisterForm(forms.ModelForm):
             attrs={
                 "class": "form-control",
                 "placeholder": "Enter your email",
-                }),
+            }
+        ),
     )
 
     password = forms.CharField(
-        label="Password:", 
+        label="Password:",
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control",
                 "placeholder": "Enter password",
-                })
-        
+            }
+        ),
     )
 
     password2 = forms.CharField(
         label="Password confirm",
         widget=forms.PasswordInput(
-            attrs={
-                "class": "form-control", 
-                "placeholder": "Enter password confirm"
-                }),
+            attrs={"class": "form-control", "placeholder": "Enter password confirm"}
+        ),
     )
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ("username", "email", "password")
 
     def clean_password2(self):
         password = self.cleaned_data.get("password")

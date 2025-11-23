@@ -12,8 +12,8 @@ class IndexView(View):
         products = Product.objects.all()
         product_types = ProductType.objects.all()
 
-        product_types_id = request.GET.get('product_types_id')
-        query = request.GET.get('q')
+        product_types_id = request.GET.get("product_types_id")
+        query = request.GET.get("q")
 
         selected_type = None
         cart_items_count = 0
@@ -31,13 +31,14 @@ class IndexView(View):
             selected_type = None
 
         if query:
-            products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+            products = products.filter(
+                Q(name__icontains=query) | Q(description__icontains=query)
+            )
 
         paginator = Paginator(products, 8)
-        
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
 
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
 
         if request.user.is_authenticated:
             try:
@@ -57,7 +58,7 @@ class IndexView(View):
             "cart_items": cart_items,
             "cart": cart,
         }
-        return render(request, "pages/index.html", context) 
+        return render(request, "pages/index.html", context)
 
 
 class AboutView(View):

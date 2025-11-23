@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rest_framework import serializers 
+from rest_framework import serializers
 
 from shop.models import Product
 from cart.models import Cart, CartItem
@@ -10,14 +10,13 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password')
+        fields = ("id", "username", "email", "password")
 
     def create(self, validated_data):
         user = User(
-            username=validated_data['username'],
-            email=validated_data.get('email', '')
+            username=validated_data["username"], email=validated_data.get("email", "")
         )
-        user.set_password(validated_data['password'])
+        user.set_password(validated_data["password"])
         user.save()
 
         return user
@@ -26,14 +25,14 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'description', 'price', 'created_at']
-        read_only_fields = ['id', 'created_at'] 
+        fields = ["id", "name", "description", "price", "created_at"]
+        read_only_fields = ["id", "created_at"]
 
 
 class ProductCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price']
+        fields = ["name", "description", "price"]
 
     def validate_price(self, value):
         if value <= 0:
@@ -44,13 +43,13 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 class ProductUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price']
+        fields = ["name", "description", "price"]
 
 
 class ProductShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'price']
+        fields = ["id", "name", "price"]
 
 
 class CartItemSerializer(serializers.ModelSerializer):
@@ -59,7 +58,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CartItem
-        fields = ['id', 'product', 'quantity', 'total_price']
+        fields = ["id", "product", "quantity", "total_price"]
 
     def get_total_price(self, obj):
         return obj.product.price * obj.quantity
@@ -68,7 +67,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 class CartItemCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        fields = ['product', 'quantity']
+        fields = ["product", "quantity"]
 
     def validate_quantity(self, value):
         if value <= 0:
@@ -77,16 +76,18 @@ class CartItemCreateSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
-    items = CartItemSerializer(many=True, read_only=True, source='cartitem_set')
+    items = CartItemSerializer(many=True, read_only=True, source="cartitem_set")
     total_cart_price = serializers.SerializerMethodField()
     total_items = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart
-        fields = ['id', 'user', 'items', 'total_cart_price', 'total_items']
+        fields = ["id", "user", "items", "total_cart_price", "total_items"]
 
     def get_total_cart_price(self, obj):
-        return sum(item.product.price * item.quantity for item in obj.cartitem_set.all())
+        return sum(
+            item.product.price * item.quantity for item in obj.cartitem_set.all()
+        )
 
     def get_total_items(self, obj):
         return obj.cartitem_set.count()
