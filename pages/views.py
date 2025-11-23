@@ -3,7 +3,9 @@ from django.shortcuts import render
 from django.views import View
 from django.core.paginator import Paginator
 
-from shop.models import Product, ProductType, Cart, CartItem
+from shop.models import Product, ProductType
+from cart.models import Cart, CartItem
+
 
 class IndexView(View):
     def get(self, request):
@@ -12,6 +14,12 @@ class IndexView(View):
 
         product_types_id = request.GET.get('product_types_id')
         query = request.GET.get('q')
+
+        selected_type = None
+        cart_items_count = 0
+        cart_product_ids = []
+        cart_items = []
+        cart = []
 
         if product_types_id:
             try:

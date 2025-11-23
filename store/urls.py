@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 from shop.urls import urlpatterns as shop_patterns
 from pages.urls import urlpatterns as pages_patterns
 from users.urls import urlpatterns as users_patterns
+from cart.urls import urlpatterns as cart_patterns
 
 
 urlpatterns = [
@@ -14,6 +15,7 @@ urlpatterns = [
     path("", include(pages_patterns)),
     path("shop/", include(shop_patterns)),
     path("user/", include(users_patterns)),
+    path("cart/", include(cart_patterns)),
     ]
 
 

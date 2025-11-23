@@ -28,6 +28,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "shop",
+    "cart",
+    "pages",
+    "users",
+    "api",
     "social_django",
 ]
 
