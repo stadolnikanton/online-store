@@ -10,7 +10,6 @@ class Register(View):
         form = UserRegisterForm()
         return render(request, "registration/register.html", {"form": form})
 
-
     def post(self, request):
         form = UserRegisterForm(request.POST)
 
@@ -24,8 +23,14 @@ class Register(View):
 
         return render(request, 'registration/register.html', {'form': form})
 
+
 class Logout(View):
     def post(self, request):
         print(request)
         logout(request)
         return redirect(to='/')
+
+
+class Account(View):
+    def get(self, request):
+        return render(request, "user/account.html")
