@@ -24,11 +24,13 @@
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-dark btn-lg">Login</button>
+                                <div class="text-center my-2"><span>or</span></div>
+                                <a class="btn btn-primary" href="{% url 'social:begin' 'google-oauth2' %}">Войти с google</a>
                             </div>
                         </form>
                     </div>
                     <div class="card-footer text-center py-3">
-                        <p class="mb-0">Don't have an account? <a href="" class="text-dark">Register here</a></p>
+                        <p class="mb-0">Don't have an account? <a href="{% url 'register' %}" class="text-dark">Register here</a></p>
                     </div>
                 </div>
             </div>

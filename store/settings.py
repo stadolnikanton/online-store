@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "shop",
+    "social_django",
 ]
 
 MIDDLEWARE = [
@@ -39,6 +40,27 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "22296475577-ii3gs1sio0vk8o4t1vff1unjuu9iudge.apps.googleusercontent.com"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+#SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/accounts/google/login/callback/'
+
+#LOGIN_URL = '/auth/login/google-oauth2/'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+import logging
+logger = logging.getLogger('social')
+logger.setLevel(logging.DEBUG)
 
 ROOT_URLCONF = "store.urls"
 
@@ -86,9 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
-
-LOGIN_REDIRECT_URL = "/"
 
 
 LANGUAGE_CODE = "en-us"
