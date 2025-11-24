@@ -1,3 +1,4 @@
+from django.http import request, response
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -28,6 +29,17 @@ class ProductDetailsAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="Получить продукт по id",
+        responses={
+            200: ProductSerializer(many=True),
+            401: """ Response by error 401
+
+            {
+                "detail": "Authentication credentials were not provided."
+            }""",
+        },
+    )
     def get(self, request, pk):
         try:
             product = Product.objects.get(pk=pk)
@@ -44,6 +56,11 @@ class ProductDetailsAPIView(APIView):
 
         return Response(serializer.data)
 
+    @swagger_auto_schema(
+        operation_summary="Обновить продукт по id",
+        request_body=ProductUpdateSerializer,
+        responses={200: ProductUpdateSerializer()},
+    )
     def put(self, request, pk):
         product = Product.objects.get(pk=pk)
 
@@ -62,6 +79,10 @@ class ProductDetailsAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(
+        operation_summary="Удалить продукт по id",
+        responses={204: "No content", 404: "Not found"},
+    )
     def delete(self, request, pk):
         product = Product.objects.get(pk=pk)
 
@@ -80,6 +101,14 @@ class ProductListAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="Получить все продукты",
+        responses={
+            200: ProductSerializer(many=True),
+            400: "Bad request",
+            404: "Not found",
+        },
+    )
     def get(self, request):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
