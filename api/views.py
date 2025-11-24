@@ -1,4 +1,3 @@
-from itertools import product
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -6,14 +5,20 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from api import serializers
+
+from drf_yasg.utils import swagger_auto_schema
+
 from api.serializers import (
     RegisterSerializer,
     ProductSerializer,
     ProductCreateSerializer,
     ProductUpdateSerializer,
 )
-from api.serializers import CartItemSerializer, CartItemCreateSerializer, CartSerializer
+from api.serializers import (
+    CartItemSerializer,
+    CartItemCreateSerializer,
+    CartSerializer,
+)
 
 from shop.models import Product
 from cart.models import Cart, CartItem
@@ -31,7 +36,8 @@ class ProductDetailsAPIView(APIView):
 
         if not product:
             return Response(
-                {"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND
+                {"error": "Product not found"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         serializer = ProductSerializer(product)
@@ -43,7 +49,8 @@ class ProductDetailsAPIView(APIView):
 
         if not product:
             return Response(
-                {"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND
+                {"error": "Product not found"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         serializer = ProductUpdateSerializer(product, data=request.data)
@@ -60,7 +67,8 @@ class ProductDetailsAPIView(APIView):
 
         if not product:
             return Response(
-                {"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND
+                {"error": "Product not found"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         product.delete()
@@ -78,6 +86,11 @@ class ProductListAPIView(APIView):
 
         return Response(serializer.data)
 
+    @swagger_auto_schema(
+        operation_summary="Cоздать продукт",
+        request_body=ProductSerializer,
+        responses={201: ProductSerializer(many=True)},
+    )
     def post(self, request, product):
         serializer = ProductCreateSerializer(data=request.data)
 
@@ -127,7 +140,8 @@ class CartAddItemAPIView(APIView):
                 cart_item.save()
 
             return Response(
-                CartItemSerializer(cart_item).data, status=status.HTTP_201_CREATED
+                CartItemSerializer(cart_item).data,
+                status=status.HTTP_201_CREATED,
             )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -149,7 +163,8 @@ class CartRemoveItemAPIView(APIView):
             )
         except CartItem.DoesNotExist:
             return Response(
-                {"error": "Item not found in cart"}, status=status.HTTP_404_NOT_FOUND
+                {"error": "Item not found in cart"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
 
@@ -187,6 +202,19 @@ class CartUpdateItemAPIView(APIView):
 class RegisterAPIView(APIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(
+        operation_summary="Регистрация",
+        request_body=RegisterSerializer,
+        responses={
+            201: """ some text
+
+            {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            },
+            """
+        },
+    )
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
 
@@ -194,7 +222,9 @@ class RegisterAPIView(APIView):
             user = serializer.save()
 
             refresh = RefreshToken.for_user(user)
-            refresh.payload.update({"user_id": user.id, "username": user.username})
+            refresh.payload.update(
+                {"user_id": user.id, "username": user.username}
+            )
 
             return Response(
                 {
@@ -220,7 +250,11 @@ class LogoutAPIView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
 
-            return Response({"success": "Выход успешен"}, status=status.HTTP_200_OK)
+            return Response(
+                {"success": "Выход успешен"}, status=status.HTTP_200_OK
+            )
 
         except Exception as e:
-            return Response({"error": f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": f"{e}"}, status=status.HTTP_400_BAD_REQUEST
+            )
