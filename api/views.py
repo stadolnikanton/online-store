@@ -144,11 +144,6 @@ class CartAPIView(APIView):
         serializer = CartSerializer(cart)
         return Response(serializer.data)
 
-
-class CartAddItemAPIView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
     def post(self, request):
         try:
             cart = Cart.objects.get(user=request.user)
@@ -269,6 +264,7 @@ class RegisterAPIView(APIView):
 class LogoutAPIView(APIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(operation_summary="Выход", responses={204: ""})
     def post(self, request):
         refresh_token = request.data.get("refresh_token", "")
 
