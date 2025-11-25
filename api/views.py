@@ -135,6 +135,10 @@ class CartAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="Получить или создать корзину пользователя",
+        responses={201: CartSerializer()},
+    )
     def get(self, request):
         try:
             cart = Cart.objects.get(user=request.user)
@@ -144,6 +148,11 @@ class CartAPIView(APIView):
         serializer = CartSerializer(cart)
         return Response(serializer.data)
 
+    @swagger_auto_schema(
+        operation_summary="Добавить товар в корзину",
+        request_body=CartItemCreateSerializer,
+        responses={200: CartItemCreateSerializer()},
+    )
     def post(self, request):
         try:
             cart = Cart.objects.get(user=request.user)
@@ -170,11 +179,11 @@ class CartAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class CartRemoveItemAPIView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
+    @swagger_auto_schema(
+        operation_summary="удалить товар из корзины",
+        request_body=CartItemCreateSerializer,
+        responses={204: ""},
+    )
     def delete(self, request, product_id):
         try:
             cart = Cart.objects.get(user=request.user)
@@ -191,11 +200,11 @@ class CartRemoveItemAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-
-class CartUpdateItemAPIView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
+    @swagger_auto_schema(
+        operation_summary="удалить товар из корзины",
+        request_body=CartItemSerializer,
+        responses={200: CartItemSerializer},
+    )
     def patch(self, request, product_id):
         try:
             cart = Cart.objects.get(user=request.user)

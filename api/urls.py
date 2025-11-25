@@ -26,7 +26,6 @@ urlpatterns = [
         ProductDetailsAPIView.as_view(),
         name="product-detail",
     ),
-    path("cart/", CartAPIView.as_view(), name="cart"),
     path(
         "cart/<int:product_id>/",
         CartAPIView.as_view(),
