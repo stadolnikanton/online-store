@@ -63,7 +63,22 @@
                             <strong>Total:</strong>
                             <strong>{{ total }} ₽</strong>
                         </div>
-                        <button class="btn btn-dark w-100">Proceed to Checkout</button>
+                        <form action="{% url 'order' %}" method="post">
+                            <div class="form-check">
+                                <input class="form-check-input" value="cash" type="radio" name="radioDefault" id="radioDefault1">
+                                    <label class="form-check-label" for="radioDefault1">
+                                        Оплата наличными при получении
+                                    </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" value="online" type="radio" name="radioDefault" id="radioDefault2" checked>
+                                    <label class="form-check-label" for="radioDefault2">
+                                        Оплата онлайн
+                                    </label>
+                            </div>
+                            {% csrf_token %}
+                            <button class="btn btn-dark w-100">Proceed to Checkout</button>
+                        </form>
                         <a href="/" class="btn btn-outline-dark w-100 mt-2">Continue Shopping</a>
                     </div>
                 </div>
