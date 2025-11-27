@@ -104,5 +104,5 @@ class OrderView(View):
         if payment_method == "cash":
             return render(request, "cart/order.html")
         if payment_method == "online":
-
+            pass
         # return render(request, "order/order.html", {"cart_items": cart_items})
