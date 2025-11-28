@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, resolve_url
 from django.views import View
 from django.contrib import messages
+from drf_yasg.utils import status
+from rest_framework.response import Response
 
 from cart.models import Cart, CartItem
 from shop.models import Product
@@ -85,3 +87,22 @@ class CartView(View):
             messages.error(request, "Item not found")
 
         return redirect("cart")
+
+
+class OrderView(View):
+    def post(self, request):
+        payment_method = request.POST.get("radioDefault")
+        user = request.user
+        cart = user.cart
+        cart_items = CartItem.objects.filter(cart=cart)
+        print("--------------------------")
+        print(payment_method)
+        for item in cart_items:
+            print(item.id)
+        print("--------------------------")
+
+        if payment_method == "cash":
+            return render(request, "cart/order.html")
+        if payment_method == "online":
+            pass
+        # return render(request, "order/order.html", {"cart_items": cart_items})
