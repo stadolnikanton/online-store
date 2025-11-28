@@ -1,7 +1,7 @@
 import os
+
 from celery import Celery
 from celery.schedules import crontab
-
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "store.settings")
 
@@ -18,6 +18,5 @@ app.conf.beat_schedule = {
     "run-every-midnight": {
         "task": "shop.tasks.scheduled_task",
         "schedule": crontab(hour=0, minute=0),
-        # "schedule": 10.0,
     },
 }
