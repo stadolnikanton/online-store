@@ -14,7 +14,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User(
-            username=validated_data["username"], email=validated_data.get("email", "")
+            username=validated_data["username"],
+            email=validated_data.get("email", ""),
         )
         user.set_password(validated_data["password"])
         user.save()
@@ -71,12 +72,16 @@ class CartItemCreateSerializer(serializers.ModelSerializer):
 
     def validate_quantity(self, value):
         if value <= 0:
-            raise serializers.ValidationError("Количество должно быть положительным")
+            raise serializers.ValidationError(
+                "Количество должно быть положительным"
+            )
         return value
 
 
 class CartSerializer(serializers.ModelSerializer):
-    items = CartItemSerializer(many=True, read_only=True, source="cartitem_set")
+    items = CartItemSerializer(
+        many=True, read_only=True, source="cartitem_set"
+    )
     total_cart_price = serializers.SerializerMethodField()
     total_items = serializers.SerializerMethodField()
 
@@ -86,7 +91,8 @@ class CartSerializer(serializers.ModelSerializer):
 
     def get_total_cart_price(self, obj):
         return sum(
-            item.product.price * item.quantity for item in obj.cartitem_set.all()
+            item.product.price * item.quantity
+            for item in obj.cartitem_set.all()
         )
 
     def get_total_items(self, obj):

@@ -36,7 +36,10 @@ class UserRegisterForm(forms.ModelForm):
     password2 = forms.CharField(
         label="Password confirm",
         widget=forms.PasswordInput(
-            attrs={"class": "form-control", "placeholder": "Enter password confirm"}
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter password confirm",
+            }
         ),
     )
 

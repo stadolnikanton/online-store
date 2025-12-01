@@ -1,7 +1,7 @@
 import requests
 import logging
 from celery import shared_task
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
 
 logger = logging.getLogger("api")
 
