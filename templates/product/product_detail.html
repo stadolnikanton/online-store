@@ -19,10 +19,21 @@
             <div class="col-md-6">
                 <div class="small mb-1">SKU: BST-{{ product.id }}</div>
                 <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
-                <div class="fs-5 mb-3">
-                    <span class="text-decoration-line-through text-muted me-2">${{ product.price|add:"20" }}</span>
-                    <span>${{ product.price }}</span>
+                
+                <!-- Цена в рублях -->
+                <div class="fs-5 mb-2">
+                    <span class="text-decoration-line-through text-muted me-2">{{ product.price|add:"2000" }} ₽</span>
+                    <span class="fw-bold">{{ product.price }} ₽</span>
                 </div>
+                
+                <!-- Цена в долларах (НОВАЯ СТРОКА) -->
+                <div class="mb-3">
+                    <small class="text-muted">
+                        ≈ {{ price_in_usd|default:"0.00" }} USD 
+                        <span class="text-muted">(курс: {{ usd_rate|default:"1.00"|floatformat:2 }})</span>
+                    </small>
+                </div>
+                
                 <p class="lead">{{ product.description|default:"No description available." }}</p>
                 
                 <div class="d-flex">

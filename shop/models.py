@@ -11,7 +11,9 @@ class ProductType(models.Model):
 class Product(models.Model):
     name = models.CharField(verbose_name="Название товара")
     description = models.TextField(verbose_name="Описание")
-    price = models.DecimalField(verbose_name="Цена", max_digits=10, decimal_places=2)
+    price = models.DecimalField(
+        verbose_name="Цена", max_digits=10, decimal_places=2
+    )
     count = models.PositiveIntegerField(verbose_name="Количество товаров")
     product_types = models.ForeignKey(ProductType, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="product_img", blank=True)

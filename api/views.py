@@ -1,10 +1,12 @@
-from django.http import request, response
+from django.core.mail import send_mail
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 from drf_yasg.utils import swagger_auto_schema
@@ -23,6 +25,28 @@ from api.serializers import (
 
 from shop.models import Product
 from cart.models import Cart, CartItem
+
+
+def send_registration_email(user):
+    subject = "Добро пожаловать в наш магазин!"
+    html_message = render_to_string(
+        "templates/emails/success_register.html",
+        {
+            "username": user.username,
+            "user_email": user.email,
+            "site_url": "http://ваш-сайт.com",
+        },
+    )
+    plain_message = strip_tags(html_message)
+
+    send_mail(
+        subject,
+        plain_message,
+        "noreply@store.com",
+        [user.email],
+        fail_silently=True,
+        html_message=html_message,
+    )
 
 
 class ProductDetailsAPIView(APIView):
@@ -258,7 +282,7 @@ class RegisterAPIView(APIView):
             refresh.payload.update(
                 {"user_id": user.id, "username": user.username}
             )
-
+            send_registration_email()
             return Response(
                 {
                     "refresh": str(refresh),
