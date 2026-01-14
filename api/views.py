@@ -44,16 +44,12 @@ class ProductDetailsAPIView(APIView):
         try:
             product = Product.objects.get(pk=pk)
         except Product.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        if not product:
             return Response(
                 {"error": "Product not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
         serializer = ProductSerializer(product)
-
         return Response(serializer.data)
 
     @swagger_auto_schema(
@@ -62,9 +58,9 @@ class ProductDetailsAPIView(APIView):
         responses={200: ProductUpdateSerializer()},
     )
     def put(self, request, pk):
-        product = Product.objects.get(pk=pk)
-
-        if not product:
+        try:
+            product = Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
             return Response(
                 {"error": "Product not found"},
                 status=status.HTTP_404_NOT_FOUND,
@@ -74,7 +70,6 @@ class ProductDetailsAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
-
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -84,16 +79,15 @@ class ProductDetailsAPIView(APIView):
         responses={204: "No content", 404: "Not found"},
     )
     def delete(self, request, pk):
-        product = Product.objects.get(pk=pk)
-
-        if not product:
+        try:
+            product = Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
             return Response(
                 {"error": "Product not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
         product.delete()
-
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -120,12 +114,11 @@ class ProductListAPIView(APIView):
         request_body=ProductSerializer,
         responses={201: ProductSerializer(many=True)},
     )
-    def post(self, request, product):
+    def post(self, request):
         serializer = ProductCreateSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

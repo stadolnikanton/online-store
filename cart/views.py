@@ -24,9 +24,13 @@ class CartView(View):
             except Cart.DoesNotExist:
                 cart_items = []
                 cart_items_count = 0
+                subtotal = 0
+                total = 0
         else:
             cart_items = []
             cart_items_count = 0
+            subtotal = 0
+            total = 0
 
         context = {
             "cart_items": cart_items,
