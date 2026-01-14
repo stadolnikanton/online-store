@@ -18,4 +18,5 @@
    alembic upgrade head
 
 4. Запуск:
-   python main.py
+    python manage.py migrate
+    python manage.py runserver
