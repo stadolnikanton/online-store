@@ -17,7 +17,6 @@ class IndexView(View):
 
         selected_type = None
         cart_items_count = 0
-        cart_product_ids = []
         cart_items = []
         cart = []
 

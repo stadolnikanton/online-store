@@ -3,7 +3,14 @@ from shop.models import Product, ProductType
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("name", "description", "price", "count", "product_types", "image")
+    list_display = (
+        "name",
+        "description",
+        "price",
+        "count",
+        "product_types",
+        "image",
+    )
     list_filter = ("name", "product_types")
 
 

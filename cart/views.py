@@ -1,8 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404, resolve_url
-from django.views import View
 from django.contrib import messages
-from drf_yasg.utils import status
-from rest_framework.response import Response
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views import View
 
 from cart.models import Cart, CartItem
 from shop.models import Product

@@ -3,6 +3,7 @@ from django.views import View
 from django.contrib.auth import login, logout
 
 from users.forms import UserRegisterForm
+from api.views import send_registration_email
 
 
 class Register(View):
@@ -15,8 +16,12 @@ class Register(View):
 
         if form.is_valid():
             user = form.save()
-            login(request, user)
-
+            send_registration_email(user)
+            login(
+                request,
+                user,
+                backend="django.contrib.auth.backends.ModelBackend",
+            )
             return redirect(to="/")
         else:
             print("Что-то не так!")
